@@ -1,0 +1,27 @@
+image: ubuntu
+
+stages:
+  - build
+  
+before_script:
+  - service_name=$(echo $CI_PROJECT_PATH | sed 's;/;.;g')
+  - export VERSION=$CI_COMMIT_TAG
+  - |
+    if [[ -z "$VERSION" ]]; then
+        export VERSION=$CI_COMMIT_REF_NAME
+    fi
+
+build:
+  stage: build
+  variables:
+    GIT_SUBMODULE_STRATEGY: normal
+  script:
+    - apt -y update
+    - apt install nodejs npm
+    - npm install facebook-chat-api mqtt
+
+
+  only:
+    - master
+    - develop
+    - tags
