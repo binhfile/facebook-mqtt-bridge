@@ -1,0 +1,27 @@
+{
+  "pid": {
+    "directory": "/tmp/velint18/pid.d"
+  },
+  "logging": {
+    "file": {
+      "enabled": true,
+      "directory": "/tmp/velint18/log.d",
+      "file_max_size": 10,
+      "file_count": 5
+    },
+    "udp": {
+      "enabled": true,
+      "address": "127.0.0.1",
+      "port": 10000
+    }
+  },
+  "broker": {
+    "mqtt": {
+      "enabled": true,
+      "address": "10.0.1.101",
+      "port": 1883
+    },
+    "message_size": "1MB"
+  }
+}
+

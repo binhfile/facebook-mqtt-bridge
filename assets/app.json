@@ -9,7 +9,6 @@
     }
   },
   "mqtt": {
-    "uri": "mqtt://",
     "notify_topic": "",
     "command_topic": ""
   }

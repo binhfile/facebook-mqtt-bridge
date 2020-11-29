@@ -1,8 +1,31 @@
 const login = require("facebook-chat-api");
 const fs = require('fs');
 const mqtt = require('mqtt')
+const arg = require('arg')
 
-let config = JSON.parse(fs.readFileSync('assets/app.json'));
+const args = arg({
+	// Types
+	'--help':    Boolean,
+	'--common-cfg': String,
+	'--app-cfg': String,
+	'--name':    String,
+});
+
+let common_cfg_file="assets/common.json";
+let app_cfg_file="assets/common.json";
+if (args["--common-cfg"] !== undefined && args["--common-cfg"].length > 0){
+  common_cfg_file = args["--common-cfg"];
+}
+if (args["--app-cfg"] !== undefined && args["--app-cfg"].length > 0){
+  app_cfg_file = args["--app-cfg"];
+}
+
+console.log("common config = "+common_cfg_file+" app config = "+app_cfg_file);
+
+let common_cfg = JSON.parse(fs.readFileSync(common_cfg_file));
+let app_cfg = JSON.parse(fs.readFileSync(app_cfg_file));
+let config = Object.assign({}, common_cfg, app_cfg);
+
 
 var facebook_api = undefined;
 var mqtt_client = undefined;
@@ -10,7 +33,8 @@ var mqtt_client = undefined;
 var selected_group = undefined;
 var group_name = config.facebook.group.name;
 
-console.log("Group = "+group_name);
+console.log("Group = " + group_name);
+console.log("Facebook = "+config.facebook.user.name);
 //console.log("User="+config.user.name+"/"+config.user.secret);
 
 const obj = {email: config.facebook.user.name, password: config.facebook.user.secret};
@@ -68,7 +92,10 @@ login(obj, (err, api) => {
 
 });
 
-mqtt_client  = mqtt.connect(config.mqtt.uri)
+console.log("Mqtt = "+"mqtt://"+config.broker.mqtt.address+":"+config.broker.mqtt.port);
+console.log("Mqtt notify topic  = "+config.mqtt.notify_topic);
+console.log("Mqtt command topic = "+config.mqtt.command_topic);
+mqtt_client  = mqtt.connect("mqtt://"+config.broker.mqtt.address+":"+config.broker.mqtt.port)
  
 mqtt_client.on('connect', function () {
   console.log('mqtt connected');
