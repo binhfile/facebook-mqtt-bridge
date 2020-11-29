@@ -17,8 +17,8 @@ build:
     GIT_SUBMODULE_STRATEGY: normal
   script:
     - export IMAGE=binhfile/facebook-mqtt-bridge:$VERSION
-    - echo $CI_DEPLOY_SECRET | docker login -u $CI_DEPLOY_USER --password-stdin
     - docker build -t $IMAGE -f Dockerfile .
+    - echo $CI_DEPLOY_SECRET | docker login -u $CI_DEPLOY_USER --password-stdin
     - docker push $IMAGE
   only:
     - master
