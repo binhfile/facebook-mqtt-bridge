@@ -9,6 +9,8 @@ const args = arg({
 	'--common-cfg': String,
 	'--app-cfg': String,
 	'--name':    String,
+}, {
+  permissive: true
 });
 
 let common_cfg_file="assets/common.json";
