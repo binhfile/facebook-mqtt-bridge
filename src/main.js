@@ -79,7 +79,7 @@ login(obj, (err, api) => {
       return;
     }
     if(event.type === 'message') {
-      var message = event.body.trim().toLowerCase();
+      var message = event.body;
       /*if(message === 'hello') {
         api.sendMessage("hi", event.threadID, function(err, list){
           if(err) {
@@ -88,6 +88,7 @@ login(obj, (err, api) => {
         });
         return;
       }*/      
+      console.log("facebook -> "+message);
       mqtt_client.publish(config.mqtt.command_topic, message);      
     }
   });
@@ -116,6 +117,7 @@ mqtt_client.on('message', function (topic, event) {
     if(facebook_api === undefined) {
       return;
     }
+    console.log("mqtt -> " + event.toString());
     facebook_api.sendMessage(event.toString(), selected_group.threadID, function(err, list){
       if(err) {
         console.error(err);
